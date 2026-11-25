@@ -33,25 +33,56 @@ async function connect(): Promise<Db> {
   return drizzle(client, { schema });
 }
 
+/** First row of a raw query (PGlite returns { rows }, Neon HTTP returns the rows array). */
+const first = <T,>(res: unknown): T | undefined =>
+  (res as { rows?: T[] }).rows?.[0] ?? (Array.isArray(res) ? (res[0] as T) : undefined);
+
+// A fingerprint of the table SQL: when it changes, the DDL runs again (once), otherwise it's skipped.
+// On Vercel every cold start would otherwise send ~60 statements to Neon before the first page.
+const SCHEMA_VERSION = (() => {
+  let h = 5381;
+  for (const ch of DDL.join("\n")) h = ((h << 5) + h + ch.charCodeAt(0)) | 0;
+  return `v${(h >>> 0).toString(36)}`;
+})();
+
 async function init(db: Db) {
-  for (const stmt of DDL) await db.execute(sql.raw(stmt));
+  await db.execute(sql.raw(`CREATE TABLE IF NOT EXISTS demo_meta (key text PRIMARY KEY, value text NOT NULL)`));
+  const schema = first<{ value: string }>(await db.execute(sql`SELECT value FROM demo_meta WHERE key = 'schema'`))?.value;
+  if (schema !== SCHEMA_VERSION) {
+    for (const stmt of DDL) await db.execute(sql.raw(stmt));
+    await db.execute(sql`INSERT INTO demo_meta (key, value) VALUES ('schema', ${SCHEMA_VERSION})
+      ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`);
+  }
   // "today" is the daycare's today: use its time zone from here on
-  const tzRows = await db.execute<{ timezone: string }>(sql`SELECT timezone FROM centers ORDER BY id LIMIT 1`);
-  setCenterTz((tzRows as unknown as { rows: { timezone: string }[] }).rows?.[0]?.timezone ??
-    (tzRows as unknown as { timezone: string }[])[0]?.timezone);
-  const rows = await db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM centers`);
-  const n = (rows as unknown as { rows: { n: number }[] }).rows?.[0]?.n ??
-    (rows as unknown as { n: number }[])[0]?.n ?? 0;
-  if (n === 0) return seedDemoData(db);
+  setCenterTz(first<{ timezone: string }>(await db.execute(sql`SELECT timezone FROM centers ORDER BY id LIMIT 1`))?.timezone);
+  const n = first<{ n: number }>(await db.execute(sql`SELECT count(*)::int AS n FROM centers`))?.n ?? 0;
 
   // Demo freshness: the sample day is built around "today". When the stored data is
   // from an earlier day, rebuild it so every visitor sees a live-looking school day.
-  const latest = await db.execute<{ d: string | null }>(sql`SELECT max(date) AS d FROM voice_notes`);
-  const d = (latest as unknown as { rows: { d: string | null }[] }).rows?.[0]?.d ??
-    (latest as unknown as { d: string | null }[])[0]?.d ?? null;
-  if (!d || d < todayStr()) {
-    await db.execute(sql.raw(`TRUNCATE ${ALL_TABLES.join(", ")} RESTART IDENTITY`));
-    await seedDemoData(db);
+  const d = n ? first<{ d: string | null }>(await db.execute(sql`SELECT max(date) AS d FROM voice_notes`))?.d ?? null : null;
+  const today = todayStr();
+  if (n > 0 && d && d >= today) return;
+
+  // On Vercel many servers can wake up at once: only the one that claims today's key rebuilds,
+  // the others wait for it (so the demo data is never created twice).
+  const key = `seed:${today}`;
+  const claimed = first<{ key: string }>(await db.execute(sql`INSERT INTO demo_meta (key, value) VALUES (${key}, 'running')
+    ON CONFLICT (key) DO NOTHING RETURNING key`));
+  if (claimed) {
+    try {
+      if (n > 0) await db.execute(sql.raw(`TRUNCATE ${ALL_TABLES.join(", ")} RESTART IDENTITY`));
+      await seedDemoData(db);
+      await db.execute(sql`UPDATE demo_meta SET value = 'done' WHERE key = ${key}`);
+    } catch (e) {
+      await db.execute(sql`DELETE FROM demo_meta WHERE key = ${key}`); // let the next request try again
+      throw e;
+    }
+    return;
+  }
+  for (let i = 0; i < 90; i++) {
+    const v = first<{ value: string }>(await db.execute(sql`SELECT value FROM demo_meta WHERE key = ${key}`))?.value;
+    if (v !== "running") return;
+    await new Promise((r) => setTimeout(r, 1000));
   }
 }
 
