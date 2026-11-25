@@ -1,0 +1,15 @@
+# local demo database (PGlite)
+/.data
+
+# local logs
+*.log
+
+# client documents stay out of the repo
+*.docx
+
+# dependencies, builds, secrets
+node_modules/
+.next/
+.env*
+.vercel
+*.tsbuildinfo

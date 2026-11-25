@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Littlelog — Teacher · Today</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,50..100&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF7F0;--surface:#FFFFFF;--surface-2:#F4EEE4;--border:#E7DFD2;
+  --ink:#2A2522;--ink-2:#6B625B;--ink-3:#9A9088;
+  --primary:#2F6F62;--primary-soft:#E3F0EC;--accent:#E8955A;--accent-soft:#FCEBDD;
+  --success:#3E8E5A;--warning:#C98A1B;--warning-soft:#F8EBCF;--danger:#C8412E;--danger-soft:#FBE6E2;
+  --meal:#D9822B;--meal-s:#FBEBD9;--nap:#5B6FB5;--nap-s:#E6E9F6;--diaper:#3C8E9A;--diaper-s:#DDF0F2;
+  --activity:#8A5FB0;--activity-s:#EFE6F6;--mood:#C2A21A;--mood-s:#F7F0D2;--note:#6B625B;--note-s:#F0EBE4;
+  --sh1:0 1px 2px rgba(60,40,20,.06),0 1px 1px rgba(60,40,20,.04);
+  --sh2:0 6px 20px rgba(60,40,20,.10);--sh3:0 16px 40px rgba(60,40,20,.16);
+  --display:"Fraunces",Georgia,serif;--ui:"Plus Jakarta Sans",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#EDE6DA;color:var(--ink);font:400 16px/24px var(--ui);-webkit-font-smoothing:antialiased;min-height:100vh;display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:center;padding:40px}
+.serif{font-family:var(--display);font-variation-settings:"SOFT" 100;font-weight:600;letter-spacing:-.01em}
+.eyebrow{font:700 11px/16px var(--ui);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* side notes */
+.notes{max-width:300px;font-size:14px;line-height:21px;color:var(--ink-2)}
+.notes.left{justify-self:end}
+.notes h2{font:600 26px/31px var(--display);font-variation-settings:"SOFT" 100;color:var(--ink);margin:6px 0 10px}
+.note{display:flex;gap:10px;margin-top:16px}
+.note i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--bg);font:700 12px/24px var(--ui);text-align:center;font-style:normal}
+.note b{color:var(--ink)}
+
+/* phone */
+.phone{width:390px;height:844px;background:var(--bg);border-radius:48px;box-shadow:0 0 0 10px #1d1a18,0 0 0 11px #3a3430,0 30px 80px rgba(40,25,10,.35);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.status{height:50px;padding:16px 30px 0;display:flex;justify-content:space-between;font:700 15px var(--ui);flex:none}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#111}
+.scroll{flex:1;overflow-y:auto;padding:6px 18px 150px;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+
+/* header */
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-top:6px}
+.hdr h1{font-size:30px;line-height:35px;margin-top:2px}
+.room{display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:6px 10px 6px 8px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font:600 13px var(--ui);color:var(--ink-2)}
+.room .sun{width:18px;height:18px;border-radius:50%;background:#F6C453;display:grid;place-items:center;font-size:10px}
+.me{width:42px;height:42px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font:700 14px var(--ui);position:relative}
+.me::after{content:"";position:absolute;right:0;top:0;width:11px;height:11px;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+
+/* progress card */
+.progress{margin-top:18px;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:16px;box-shadow:var(--sh1)}
+.progress .top{display:flex;justify-content:space-between;align-items:center}
+.progress .big{font:600 26px/30px var(--display);font-variation-settings:"SOFT" 100;font-variant-numeric:tabular-nums}
+.progress .big span{font:600 15px var(--ui);color:var(--ink-3)}
+.countdown{font:700 12px var(--ui);background:var(--accent-soft);color:#A3561F;padding:6px 10px;border-radius:999px;display:flex;gap:5px;align-items:center}
+.bar{height:8px;border-radius:8px;background:var(--surface-2);margin:12px 0 10px;overflow:hidden;display:flex;gap:2px}
+.bar i{display:block;height:100%}
+.legend{display:flex;gap:14px;font:600 12px var(--ui);color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend b{width:8px;height:8px;border-radius:50%;display:block}
+
+/* attention */
+.attn{margin-top:14px;display:grid;gap:10px}
+.review{background:var(--surface);border-radius:18px;border:1px solid var(--border);border-left:4px solid var(--warning);padding:14px 14px 14px 14px;box-shadow:var(--sh1)}
+.review .h{display:flex;align-items:center;gap:8px;font:700 15px var(--ui)}
+.review .h .ic{width:22px;height:22px;border-radius:50%;background:var(--warning-soft);color:var(--warning);display:grid;place-items:center;font:800 13px var(--ui)}
+.review p{font-size:14px;line-height:20px;color:var(--ink-2);margin:4px 0 10px 30px}
+.review q{color:var(--ink);font-style:italic}
+.pills{display:flex;gap:8px;margin-left:30px;flex-wrap:wrap}
+.pill{display:flex;align-items:center;gap:6px;height:40px;padding:0 14px 0 6px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2);font:600 14px var(--ui)}
+.pill .mini{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:700 11px var(--ui)}
+.pill.skip{padding:0 14px;color:var(--ink-3);background:transparent}
+.inc{display:flex;align-items:center;gap:12px;background:var(--danger-soft);border-radius:18px;padding:12px 14px;border-left:4px solid var(--danger)}
+.inc .ic{width:34px;height:34px;border-radius:10px;background:var(--danger);color:#fff;display:grid;place-items:center;flex:none}
+.inc b{font:700 14px var(--ui);display:block}
+.inc small{font-size:13px;color:var(--ink-2)}
+.inc .tag{margin-left:auto;font:700 10px var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--danger);white-space:nowrap}
+
+/* section header + filters */
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:24px 2px 10px}
+.sec h2{font-size:20px}
+.sec a{font:700 13px var(--ui);color:var(--primary);text-decoration:none}
+.filters{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none}
+.f{height:34px;padding:0 13px;border-radius:999px;border:1px solid var(--border);background:var(--surface);font:600 13px var(--ui);color:var(--ink-2);white-space:nowrap;display:flex;align-items:center;gap:6px}
+.f.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.f em{font-style:normal;opacity:.6}
+
+/* child rows */
+.kids{display:grid;gap:10px}
+.kid{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--sh1);overflow:hidden}
+.kid .row{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font:700 15px var(--ui);flex:none;position:relative}
+.av .st{position:absolute;right:-2px;bottom:-2px;width:16px;height:16px;border-radius:50%;border:2.5px solid var(--surface);display:grid;place-items:center;font-size:8px;color:#fff}
+.kid h3{font:600 18px/22px var(--display);font-variation-settings:"SOFT" 100}
+.kid .sub{font:500 12px var(--ui);color:var(--ink-3);margin-top:1px}
+.icons{display:flex;gap:4px;margin-top:6px}
+.icons span{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:12px}
+.icons .miss{border:1.5px dashed var(--border);background:transparent}
+.kid .right{margin-left:auto;text-align:right;display:grid;justify-items:end;gap:4px}
+.badge{font:700 10px/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:999px;white-space:nowrap}
+.b-ready{background:#DDEFE2;color:#2C6B42}.b-sent{background:var(--primary-soft);color:var(--primary)}
+.b-need{background:var(--warning-soft);color:#8A5E0F}.b-low{background:var(--surface-2);color:var(--ink-3)}
+.chev{color:var(--ink-3)}
+.kid.open{box-shadow:var(--sh2);border-color:#D8CDBD}
+.entries{border-top:1px solid var(--border);padding:4px 14px 10px;background:linear-gradient(var(--surface),#FFFCF8)}
+.e{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px dashed var(--border)}
+.e:last-of-type{border-bottom:0}
+.e .ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:14px}
+.e .t{font:700 12px var(--ui)}
+.e .d{font-size:14px;line-height:19px}
+.e time{font:600 13px var(--ui);font-variant-numeric:tabular-nums;color:var(--ink-3)}
+.entries .act{display:flex;gap:8px;margin-top:8px}
+.entries .act button{flex:1;height:40px;border-radius:12px;font:700 13px var(--ui);border:1px solid var(--border);background:var(--surface)}
+.entries .act button.p{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* record dock */
+.dock{position:absolute;left:0;right:0;bottom:0;height:138px;pointer-events:none}
+.dock::before{content:"";position:absolute;inset:-30px 0 0;background:linear-gradient(rgba(251,247,240,0),var(--bg) 40%)}
+.tabbar{position:absolute;left:12px;right:12px;bottom:14px;height:70px;background:var(--surface);border:1px solid var(--border);border-radius:26px;box-shadow:var(--sh2);display:grid;grid-template-columns:1fr 1fr 110px 1fr 1fr;align-items:center;pointer-events:auto}
+.tab{display:grid;justify-items:center;gap:3px;font:700 11px var(--ui);color:var(--ink-3);position:relative}
+.tab svg{width:22px;height:22px}
+.tab.on{color:var(--primary)}
+.tab .dot{position:absolute;top:-2px;right:calc(50% - 16px);min-width:16px;height:16px;border-radius:8px;background:var(--danger);color:#fff;font:800 10px/16px var(--ui);padding:0 4px}
+.rec{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);width:84px;height:84px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px var(--bg),0 12px 28px rgba(232,149,90,.55);display:grid;place-items:center;pointer-events:auto}
+.rec svg{width:34px;height:34px}
+.rec-l{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font:800 11px var(--ui);color:#A3561F;letter-spacing:.02em;white-space:nowrap}
+.home{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:#1d1a18;opacity:.85}
+
+@media (max-width:1100px){body{grid-template-columns:1fr;justify-items:center}.notes{justify-self:center;max-width:390px}.notes.left{order:-1}}
+</style>
+</head>
+<body>
+
+<aside class="notes left">
+  <div class="eyebrow">Screen 01 · Teacher · Mobile</div>
+  <h2>Today</h2>
+  <p>The teacher's home screen. Opened dozens of times a day, usually with one free hand, so everything important is in the top half and the record button is always under the thumb.</p>
+  <div class="note"><i>1</i><div><b>Report progress.</b> One glance shows how many daily reports are ready before the 4:30 PM send time.</div></div>
+  <div class="note"><i>2</i><div><b>Needs attention first.</b> Unclear names from voice notes appear at the top, and the teacher resolves them in one tap. The AI never guesses.</div></div>
+  <div class="note"><i>3</i><div><b>Incident status.</b> Teachers see that an incident went to the director, but they don't approve it themselves.</div></div>
+</aside>
+
+<div class="phone">
+  <div class="island"></div>
+  <div class="status"><span>2:47</span><span style="font-size:12px;letter-spacing:1px">●●●● 5G ▮</span></div>
+
+  <div class="scroll">
+    <!-- header -->
+    <div class="hdr">
+      <div>
+        <div class="eyebrow">Tuesday, Nov 24</div>
+        <h1 class="serif">Good afternoon, Sara</h1>
+        <div class="room"><span class="sun">☀</span>Sunflower Room · 8 children <span style="color:var(--ink-3)">▾</span></div>
+      </div>
+      <div class="me">SA</div>
+    </div>
+
+    <!-- progress -->
+    <div class="progress">
+      <div class="top">
+        <div>
+          <div class="eyebrow">Daily reports</div>
+          <div class="big">5 <span>of 8 ready</span></div>
+        </div>
+        <div class="countdown">⏱ Send at 4:30 · 1h 43m</div>
+      </div>
+      <div class="bar"><i style="width:25%;background:var(--primary)"></i><i style="width:37.5%;background:var(--success)"></i><i style="width:12.5%;background:var(--warning)"></i><i style="width:25%;background:#E2D8C9"></i></div>
+      <div class="legend">
+        <span><b style="background:var(--primary)"></b>Sent 2</span>
+        <span><b style="background:var(--success)"></b>Ready 3</span>
+        <span><b style="background:var(--warning)"></b>Review 1</span>
+        <span><b style="background:#E2D8C9"></b>Few notes 2</span>
+      </div>
+    </div>
+
+    <!-- attention -->
+    <div class="attn">
+      <div class="review">
+        <div class="h"><span class="ic">?</span>Who is “Sam”?</div>
+        <p>From your 2:31 PM note: <q>Sam had half his snack.</q> Two children match.</p>
+        <div class="pills">
+          <button class="pill"><span class="mini" style="background:#DDF0F2;color:#256A74">SO</span>Samuel O.</button>
+          <button class="pill"><span class="mini" style="background:#F7F0D2;color:#7A6410">SK</span>Samira K.</button>
+          <button class="pill skip">Skip</button>
+        </div>
+      </div>
+      <div class="inc">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17.5v.5"/></svg></div>
+        <div><b>Ali: incident sent to director</b><small>Scraped knee · playground · 2:15 PM</small></div>
+        <span class="tag">Awaiting<br>approval</span>
+      </div>
+    </div>
+
+    <!-- children -->
+    <div class="sec"><h2 class="serif">Children</h2><a href="#">Review reports →</a></div>
+    <div class="filters">
+      <span class="f on">All <em>8</em></span>
+      <span class="f">Needs review <em>1</em></span>
+      <span class="f">Few notes <em>2</em></span>
+      <span class="f">Sent <em>2</em></span>
+    </div>
+
+    <div class="kids">
+      <!-- expanded -->
+      <div class="kid open">
+        <div class="row">
+          <div class="av" style="background:#FBEBD9;color:#9A5414">EM<span class="st" style="background:var(--success)">✓</span></div>
+          <div>
+            <h3>Emma Carter</h3>
+            <div class="sub">2 yrs · last note 2:10 PM</div>
+          </div>
+          <div class="right"><span class="badge b-ready">Ready</span><span class="chev">▴</span></div>
+        </div>
+        <div class="entries">
+          <div class="e"><div class="ico" style="background:var(--meal-s)">🍎</div><div><div class="t" style="color:var(--meal)">Lunch</div><div class="d">Ate all of it</div></div><time>12:00</time></div>
+          <div class="e"><div class="ico" style="background:var(--nap-s)">🌙</div><div><div class="t" style="color:var(--nap)">Nap</div><div class="d">12:00 – 1:30 · 1.5 hrs</div></div><time>12:00</time></div>
+          <div class="e"><div class="ico" style="background:var(--diaper-s)">💧</div><div><div class="t" style="color:var(--diaper)">Diaper</div><div class="d">Wet</div></div><time>2:10</time></div>
+          <div class="e"><div class="ico" style="background:var(--activity-s)">🎨</div><div><div class="t" style="color:var(--activity)">Activity</div><div class="d">Finger painting with a friend</div></div><time>10:30</time></div>
+          <div class="act"><button>＋ Add entry</button><button class="p">Preview report</button></div>
+        </div>
+      </div>
+
+      <div class="kid"><div class="row">
+        <div class="av" style="background:#E6E9F6;color:#3B4C8F">AH<span class="st" style="background:var(--danger)">!</span></div>
+        <div><h3>Ali Hassan</h3><div class="icons"><span style="background:var(--meal-s)">🍎</span><span style="background:var(--nap-s)">🌙</span><span style="background:var(--danger-soft)">⚠️</span><span style="background:var(--mood-s)">🙂</span></div></div>
+        <div class="right"><span class="badge b-ready">Ready</span><span class="chev">▾</span></div>
+      </div></div>
+
+      <div class="kid"><div class="row">
+        <div class="av" style="background:#DDF0F2;color:#256A74">SO<span class="st" style="background:var(--warning)">?</span></div>
+        <div><h3>Samuel Ortiz</h3><div class="icons"><span style="background:var(--meal-s)">🍎</span><span style="background:var(--diaper-s)">💧</span><span class="miss"></span></div></div>
+        <div class="right"><span class="badge b-need">Review</span><span class="chev">▾</span></div>
+      </div></div>
+
+      <div class="kid"><div class="row">
+        <div class="av" style="background:#EFE6F6;color:#663F8A">ZK</div>
+        <div><h3>Zara Khan</h3><div class="icons"><span style="background:var(--mood-s)">🙂</span><span class="miss"></span><span class="miss"></span></div></div>
+        <div class="right"><span class="badge b-low">1 note</span><span class="chev">▾</span></div>
+      </div></div>
+
+      <div class="kid"><div class="row">
+        <div class="av" style="background:#F7F0D2;color:#7A6410">NR<span class="st" style="background:var(--primary)">✓</span></div>
+        <div><h3>Noah Reed</h3><div class="sub">Report sent at 1:05 PM · early pickup</div></div>
+        <div class="right"><span class="badge b-sent">Sent</span><span class="chev">▾</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- dock -->
+  <div class="dock">
+    <nav class="tabbar">
+      <button class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Today</button>
+      <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Notes</button>
+      <span></span>
+      <button class="tab"><span class="dot">3</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/></svg>Reports</button>
+      <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Me</button>
+    </nav>
+    <button class="rec" aria-label="Hold to record a voice note"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></button>
+    <span class="rec-l">Hold to record</span>
+    <span class="home"></span>
+  </div>
+</div>
+
+<aside class="notes">
+  <div class="eyebrow">Design details</div>
+  <div class="note"><i>4</i><div><b>Icons show what's logged.</b> Each child row shows a colored icon for each logged entry type. Dashed empty slots hint at what's still missing (for example, no nap logged yet).</div></div>
+  <div class="note"><i>5</i><div><b>Status in three ways.</b> The avatar dot, the badge text and the filter chips all show the same status, so it never depends on color alone.</div></div>
+  <div class="note"><i>6</i><div><b>Tap to expand.</b> A child row opens to show today's entries, with Add entry and Preview report. Each entry opens for edit or delete.</div></div>
+  <div class="note"><i>7</i><div><b>Record button.</b> An 84px apricot button docked in the tab bar, reachable by the thumb. Hold to record, or tap once to start and tap again to stop.</div></div>
+  <div class="note"><i>8</i><div><b>Privacy in copy.</b> “Finger painting with a friend” instead of naming the other child, because this text flows into the parent report.</div></div>
+</aside>
+
+</body>
+</html>

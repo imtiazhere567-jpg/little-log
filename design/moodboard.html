@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Littlelog — Mood Board · Warm Morning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..700,0..100;1,9..144,400..700,0..100&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1E9DC;--ink:#2A2522;--ink-2:#6B625B;--ink-3:#9A9088;
+  --primary:#2F6F62;--accent:#E8955A;--danger:#C8412E;
+  --display:"Fraunces",Georgia,serif;--ui:"Plus Jakarta Sans",system-ui,sans-serif;--hand:"Caveat",cursive;
+  --pencil:#4A4038;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#D9CDBB;font:400 15px/22px var(--ui);color:var(--ink);-webkit-font-smoothing:antialiased;padding:32px 0}
+.board{width:1400px;height:2080px;margin:0 auto;position:relative;background:var(--paper);box-shadow:0 2px 4px rgba(60,40,20,.12),0 30px 60px rgba(60,40,20,.18);overflow:hidden}
+.board::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .4  0 0 0 0 .3  0 0 0 0 .2  0 0 0 .16 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.board > *{position:absolute}
+
+/* photo prints */
+.p{background:#fff;padding:9px;box-shadow:0 1px 1px rgba(40,25,10,.10),0 10px 22px rgba(60,40,20,.20);transform:rotate(var(--r,0deg))}
+.p img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.92) sepia(.06)}
+.p.pol{padding-bottom:42px}
+.p figcaption{position:absolute;left:12px;right:12px;bottom:6px;font:700 22px/26px var(--hand);color:var(--pencil)}
+.tape{position:absolute;width:96px;height:28px;top:-13px;left:calc(50% - 48px);background:rgba(232,149,90,.5);transform:rotate(var(--tr,-4deg));
+ clip-path:polygon(2% 8%,10% 0,22% 9%,34% 1%,48% 8%,61% 0,74% 7%,88% 1%,100% 9%,98% 92%,88% 100%,76% 91%,62% 99%,49% 92%,36% 100%,22% 92%,10% 100%,0 91%);box-shadow:0 1px 1px rgba(0,0,0,.05)}
+.tape.sage{background:rgba(111,163,147,.5)}.tape.cream{background:rgba(255,251,240,.75)}
+.tape.c1{left:-22px;top:-8px;--tr:-38deg}.tape.c2{left:auto;right:-22px;top:-8px;--tr:38deg}
+.pin{position:absolute;top:-8px;left:calc(50% - 8px);width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#F7B88A,#C8662E 70%);box-shadow:1px 3px 3px rgba(0,0,0,.3)}
+
+/* handwriting */
+.hand{font:700 26px/28px var(--hand);color:var(--pencil);transform:rotate(var(--r,0deg))}
+.hand.sm{font-size:22px;line-height:24px}
+.hand.accent{color:#B9622B}.hand.sage{color:var(--primary)}
+svg.arrow{overflow:visible;fill:none;stroke:var(--pencil);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* title */
+.title{left:64px;top:56px;width:520px}
+.title .hand{font-size:30px;color:#B9622B;display:inline-block;transform:rotate(-3deg)}
+.title h1{font:600 92px/86px var(--display);font-variation-settings:"SOFT" 100;letter-spacing:-.02em;margin:6px 0 14px}
+.title h1 em{font-style:italic;font-weight:500;color:var(--accent)}
+.title p{font-size:16px;line-height:25px;color:var(--ink-2);max-width:470px}
+
+/* paint chips */
+.chip{width:112px;height:178px;background:#fff;padding:7px;box-shadow:0 1px 1px rgba(40,25,10,.1),0 6px 14px rgba(60,40,20,.16);transform:rotate(var(--r,0deg))}
+.chip .c{height:108px}
+.chip b{display:block;font:700 12px/15px var(--ui);margin-top:8px}
+.chip span{font:600 10px var(--ui);color:var(--ink-3);letter-spacing:.04em}
+
+/* paper cards */
+.card{background:#FFFDF8;box-shadow:0 1px 1px rgba(40,25,10,.08),0 10px 22px rgba(60,40,20,.16);padding:22px 24px;transform:rotate(var(--r,0deg))}
+.torn{clip-path:polygon(0 1%,6% 0,13% 1.2%,20% .2%,28% 1%,37% 0,45% 1.3%,53% .3%,62% 1%,70% 0,79% 1.1%,87% .2%,94% 1%,100% 0,100% 100%,0 100%)}
+.eyebrow{font:700 10.5px/14px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+
+/* sticky notes */
+.sticky{width:236px;padding:20px 20px 22px;box-shadow:0 2px 2px rgba(40,25,10,.08),0 14px 18px -8px rgba(60,40,20,.28);transform:rotate(var(--r,0deg));font:700 22px/25px var(--hand);color:var(--pencil)}
+.sticky h4{font:700 30px/30px var(--hand);margin-bottom:8px}
+.sticky ul{list-style:none}.sticky li{margin:3px 0}
+.y{background:#F9E7A8}.pk{background:#F6D3C4}.gr{background:#D6E8DD}.bl{background:#DCE3F2}
+
+/* phone print */
+.phone{width:262px;height:520px;border-radius:38px;background:#1d1a18;padding:9px;box-shadow:0 18px 36px rgba(40,25,10,.32);transform:rotate(var(--r,0deg))}
+.phone .scr{width:100%;height:100%;border-radius:30px;overflow:hidden;position:relative;background:url(moodboard-images/morning-tray.jpg) center/cover}
+.phone .scr::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,22,15,.35),rgba(30,22,15,.05) 45%,rgba(30,22,15,.25))}
+.phone .clock{position:relative;text-align:center;color:#fff;padding-top:44px}
+.phone .clock b{display:block;font:300 58px/1 var(--ui);letter-spacing:-.02em}
+.phone .clock span{font:600 12px var(--ui)}
+.bn{position:relative;margin:8px 10px 0;background:rgba(250,247,242,.86);backdrop-filter:blur(12px);border-radius:16px;padding:9px 10px;display:flex;gap:9px}
+.phone .clock + .bn{margin-top:26px}
+.bn i{width:30px;height:30px;border-radius:8px;flex:none;display:grid;place-items:center;font-style:normal;color:#fff;font:700 13px var(--ui)}
+.bn b{font:700 11.5px var(--ui);display:flex;justify-content:space-between}
+.bn b span{font-weight:500;color:var(--ink-3)}
+.bn p{font-size:11.5px;line-height:15px;color:var(--ink-2)}
+
+/* report print */
+.rpt{width:300px;background:#fff;border-radius:20px;padding:18px;box-shadow:0 1px 1px rgba(40,25,10,.08),0 12px 26px rgba(60,40,20,.2);transform:rotate(var(--r,0deg))}
+.rpt::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,var(--accent),#F2C27B)}
+.rpt h4{font:600 21px/25px var(--display);font-variation-settings:"SOFT" 100;margin:4px 0 10px}
+.ln{display:flex;gap:10px;align-items:center;font-size:13.5px;padding:6px 0;border-bottom:1px dashed #E7DFD2}
+.ln:last-of-type{border:0}
+.ln i{width:24px;height:24px;border-radius:7px;flex:none}
+.rpt .sign{margin-top:8px;font-size:12px;color:var(--ink-3)}
+
+.credits{left:64px;right:64px;bottom:22px;font:500 10.5px/15px var(--ui);color:var(--ink-3)}
+.credits b{color:var(--ink-2)}
+</style>
+</head>
+<body>
+<div class="board">
+
+  <!-- ============ TITLE ============ -->
+  <div class="title">
+    <span class="hand">Littlelog · mood board</span>
+    <h1>Warm<br><em>Morning</em></h1>
+    <p>A sunlit classroom at nine in the morning. Wooden toys on low shelves, soft light on the floor, a teacher who knows every child's name. Calm for the director, warm for the parent, quick for the teacher.</p>
+  </div>
+
+  <!-- ============ PAINT CHIPS ============ -->
+  <div class="chip" style="left:64px;top:452px;--r:-4deg"><div class="c" style="background:#FBF7F0;box-shadow:inset 0 0 0 1px #EDE4D6"></div><b>Morning Cream</b><span>#FBF7F0</span></div>
+  <div class="chip" style="left:158px;top:440px;--r:-1deg"><div class="c" style="background:#2F6F62"></div><b>Garden Sage</b><span>#2F6F62</span></div>
+  <div class="chip" style="left:252px;top:446px;--r:2.5deg"><div class="c" style="background:#E8955A"></div><b>Apricot Jam</b><span>#E8955A</span></div>
+  <div class="chip" style="left:346px;top:438px;--r:-2deg"><div class="c" style="background:#2A2522"></div><b>Bedtime Ink</b><span>#2A2522</span></div>
+  <div class="chip" style="left:440px;top:450px;--r:3deg"><div class="c" style="background:#F4EEE4"></div><b>Oat Milk</b><span>#F4EEE4</span></div>
+  <div class="chip" style="left:534px;top:470px;--r:7deg"><div class="c" style="background:#C8412E"></div><b>Ouch Red</b><span>#C8412E</span></div>
+  <div class="hand sm accent" style="left:540px;top:664px;width:170px;--r:4deg">red = only when a child got hurt. never decoration!</div>
+  <svg class="arrow" style="left:575px;top:640px" width="30" height="30"><path d="M14 26 C 10 16, 14 8, 18 2 M10 8 L18 2 L22 11"/></svg>
+
+  <!-- ============ HERO LIGHT ============ -->
+  <figure class="p" style="left:676px;top:52px;width:430px;height:296px;--r:1.8deg"><img src="moodboard-images/light-curtain.webp" alt="Sunlight through a sheer curtain"><span class="tape"></span></figure>
+  <figure class="p pol" style="left:1050px;top:236px;width:300px;height:244px;--r:-3.5deg"><img src="moodboard-images/seedlings-window.jpg" alt="Seedlings in terracotta pots on a sunny windowsill"><figcaption>things growing, slowly</figcaption><span class="tape sage" style="--tr:6deg"></span></figure>
+  <div class="hand" style="left:1150px;top:70px;width:220px;--r:-4deg">this light.<br>all day long.</div>
+  <svg class="arrow" style="left:1100px;top:112px" width="60" height="50"><path d="M56 4 C 40 10, 24 22, 8 40 M8 26 L8 40 L22 40"/></svg>
+
+  <!-- ============ ROW 2 ============ -->
+  <figure class="p" style="left:52px;top:712px;width:360px;height:250px;--r:-2.2deg"><img src="moodboard-images/wood-blocks.jpg" alt="Plain wooden building blocks"><span class="tape c1"></span><span class="tape c2"></span></figure>
+  <div class="hand" style="left:70px;top:972px;width:300px;--r:-2deg">natural materials &gt; plastic.<br>birch, beech, linen, clay</div>
+
+  <figure class="p pol" style="left:420px;top:742px;width:330px;height:270px;--r:2.6deg"><img src="moodboard-images/hand-painting.jpg" alt="A child's hand painting with a brush"><figcaption>small hands. never faces.</figcaption><span class="pin"></span></figure>
+
+  <figure class="p" style="left:784px;top:548px;width:244px;height:340px;--r:-1.6deg"><img src="moodboard-images/soft-knits.jpg" alt="Soft knitted blankets"><span class="tape cream"></span></figure>
+  <figure class="p" style="left:960px;top:820px;width:170px;height:170px;--r:5deg"><img src="moodboard-images/knit-hat.jpg" alt="Knitted baby hat"></figure>
+  <div class="hand sage" style="left:790px;top:902px;width:170px;--r:-3deg">nap time:<br>soft, quiet, muted</div>
+
+  <!-- type specimen -->
+  <div class="card torn" style="left:1100px;top:536px;width:262px;--r:1.4deg">
+    <div class="eyebrow">Type</div>
+    <div style="font:600 84px/1 var(--display);font-variation-settings:'SOFT' 100;margin:8px 0 2px">Aa</div>
+    <div style="font:600 15px var(--display);font-variation-settings:'SOFT' 100">Fraunces, soft serif</div>
+    <div style="font-size:12.5px;line-height:18px;color:var(--ink-2);margin-bottom:14px">names, greetings, headlines</div>
+    <div style="font:700 50px/1 var(--ui);color:var(--primary)">Aa</div>
+    <div style="font:700 14px var(--ui);margin-top:6px">Plus Jakarta Sans</div>
+    <div style="font-size:12.5px;line-height:18px;color:var(--ink-2)">everything else, clear at small sizes</div>
+  </div>
+
+  <!-- ============ ROW 3 ============ -->
+  <figure class="p" style="left:44px;top:1060px;width:400px;height:270px;--r:1.2deg"><img src="moodboard-images/montessori-shelf.jpg" alt="Low wooden classroom shelves, everything in its place"><span class="tape sage"></span></figure>
+  <div class="hand" style="left:60px;top:1342px;width:360px;--r:-1.5deg">everything has a place. → director's screens: tidy, calm, nothing hidden</div>
+
+  <figure class="p" style="left:470px;top:1050px;width:320px;height:216px;--r:-3deg"><img src="moodboard-images/crayon-scribble.jpg" alt="Crayon scribbles on paper"><span class="tape"></span></figure>
+  <figure class="p" style="left:640px;top:1222px;width:160px;height:160px;--r:7deg"><img src="moodboard-images/watercolor-palette.webp" alt="Children's watercolor palette"></figure>
+  <div class="hand sm accent" style="left:470px;top:1290px;width:170px;--r:-4deg">colour comes from <u>their</u> art, not from the UI</div>
+
+  <!-- report print -->
+  <div class="rpt" style="left:836px;top:1032px;--r:-1.6deg">
+    <div class="eyebrow">Tuesday, Nov 24</div>
+    <h4>Hi! Emma had a great day today</h4>
+    <div class="ln"><i style="background:#FBEBD9"></i>Lunch: ate all of it</div>
+    <div class="ln"><i style="background:#E6E9F6"></i>Nap: 12:00 – 1:30</div>
+    <div class="ln"><i style="background:#DDF0F2"></i>Diapers: 3 changes</div>
+    <div class="ln"><i style="background:#EFE6F6"></i>Finger painting with a friend</div>
+    <div class="sign">With love, Ms. Sara · Sunflower Room</div>
+    <span class="tape cream" style="--tr:3deg"></span>
+  </div>
+  <div class="hand" style="left:846px;top:1346px;width:240px;--r:2deg">reads like a note from someone who knows her</div>
+
+  <!-- phone print -->
+  <div class="phone" style="left:1112px;top:1036px;--r:3deg">
+    <div class="scr">
+      <div class="clock"><b>4:31</b><span>Tuesday 24 November</span></div>
+      <div class="bn"><i style="background:#2FA765">✓</i><div><b>Sunny Days Childcare <span>now</span></b><p>Hi Sarah 👋 Today's report for Emma has been sent. Open the Littlelog app to check it.</p></div></div>
+      <div class="bn"><i style="background:#4A7FD4">@</i><div><b>Mail <span>now</span></b><p>Emma's daily report is ready</p></div></div>
+      <div class="bn"><i style="background:#E8955A">☀</i><div><b>Littlelog <span>now</span></b><p>Emma's report for today is ready</p></div></div>
+    </div>
+  </div>
+  <div class="hand accent" style="left:1150px;top:1574px;width:220px;--r:-3deg">the 4:30 moment ♥</div>
+
+  <!-- ============ ROW 4 ============ -->
+  <figure class="p pol" style="left:56px;top:1452px;width:300px;height:262px;--r:-2.4deg"><img src="moodboard-images/little-boots.jpg" alt="Small rain boots lined up"><figcaption>8:00 drop-off</figcaption><span class="tape"></span></figure>
+  <figure class="p" style="left:330px;top:1500px;width:280px;height:188px;--r:2deg"><img src="moodboard-images/snack-apple.jpg" alt="Hands slicing an apple for snack"><span class="tape sage c2"></span></figure>
+  <figure class="p" style="left:90px;top:1770px;width:250px;height:168px;--r:1.5deg"><img src="moodboard-images/wood-cube.jpg" alt="Close-up of a wooden cube"></figure>
+  <figure class="p" style="left:370px;top:1730px;width:260px;height:176px;--r:-2.5deg"><img src="moodboard-images/painted-hands.jpg" alt="Hands covered in paint"><span class="tape c1"></span></figure>
+
+  <!-- voice -->
+  <div class="card torn" style="left:660px;top:1436px;width:420px;--r:-1deg">
+    <div class="eyebrow">How we write</div>
+    <p style="font:italic 400 23px/30px var(--display);font-variation-settings:'SOFT' 100;margin:10px 0 6px">“Emma had a great day. She ate all of her lunch and painted with a friend.”</p>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-bottom:14px">parents: warm, first name, specific</p>
+    <p style="font-size:14px;line-height:20px;border-left:3px solid var(--danger);padding-left:10px">Incident · 3:00 PM · Playground. Ali fell from the low slide and scraped his right knee. Area cleaned, ice applied.</p>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:6px">incidents: calm, factual, no emojis</p>
+  </div>
+  <figure class="p" style="left:700px;top:1782px;width:250px;height:168px;--r:2.5deg"><img src="moodboard-images/handwriting.jpg" alt="Handwritten notes with a pen"><span class="tape cream"></span></figure>
+
+  <!-- sticky notes -->
+  <div class="sticky gr" style="left:1110px;top:1626px;--r:-3deg">
+    <h4>yes ✓</h4>
+    <ul><li>soft daylight</li><li>wood, linen, clay</li><li>big buttons</li><li>icons + words</li><li>"a friend"</li></ul>
+  </div>
+  <div class="sticky pk" style="left:970px;top:1820px;width:200px;--r:4deg">
+    <h4>no ✕</h4>
+    <ul><li>rainbow toy-store</li><li>cartoon fonts</li><li>cold hospital blue</li></ul>
+  </div>
+  <div class="sticky y" style="left:1180px;top:1912px;width:190px;padding:16px 18px;--r:-6deg;font-size:20px;line-height:22px">
+    teacher → quick<br>parent → warm<br>director → calm
+  </div>
+
+  <!-- credits -->
+  <div class="credits"><b>Photos (Openverse, free licenses):</b> light-curtain CC0 · seedlings rudy.kleysteuber CC BY · blocks, cube A. Drauglis CC BY-SA · shelf tillwe CC BY-SA · hand painting nojhan CC BY-SA · painted hands Yeray Hernández CC BY · crayons Paul. B CC BY · knits currystrumpet CC BY-SA · hat smittenkittenorig CC BY · boots Avolore CC BY · tray, apple nenadstojkovicart CC BY · palette CC0 · handwriting Bruce Guenter CC BY. Full list in moodboard-images/credits.json</div>
+
+</div>
+</body>
+</html>
