@@ -13,7 +13,15 @@ const g = globalThis as unknown as { __littlelog?: Holder };
 const holder: Holder = (g.__littlelog ??= {});
 
 async function connect(): Promise<Db> {
-  const url = process.env.DATABASE_URL;
+  // Vercel's Neon integration may name the variable differently (or with a custom prefix).
+  const url =
+    process.env.DATABASE_URL ??
+    process.env.POSTGRES_URL ??
+    process.env.NEON_DATABASE_URL ??
+    Object.entries(process.env).find(([k, v]) => /_(DATABASE|POSTGRES)_URL$/.test(k) && v?.startsWith("postgres"))?.[1];
+  if (!url && process.env.VERCEL) {
+    throw new Error("DATABASE_URL is not set. Add it in Vercel → Settings → Environment Variables, then redeploy.");
+  }
   if (url) {
     // Production / Vercel: Neon serverless Postgres over HTTP.
     const { neon } = await import("@neondatabase/serverless");
